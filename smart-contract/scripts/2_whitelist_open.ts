@@ -39,7 +39,7 @@ async function main() {
 
     await (await contract.setMerkleRoot(rootHash)).wait();
   }
-  
+
   // Enable whitelist sale (if needed)
   if (!await contract.whitelistMintEnabled()) {
     console.log('Enabling whitelist sale...');

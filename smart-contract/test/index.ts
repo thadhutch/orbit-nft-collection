@@ -53,7 +53,7 @@ describe(CollectionConfig.contractName, function () {
   it('Contract deployment', async function () {
     const Contract = await ethers.getContractFactory(CollectionConfig.contractName);
     contract = await Contract.deploy(...ContractArguments) as NftContractType;
-    
+
     await contract.deployed();
   });
 

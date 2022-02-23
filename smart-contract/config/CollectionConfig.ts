@@ -5,10 +5,10 @@ const CollectionConfig: CollectionConfigInterface = {
   // The contract name can be updated using the following command:
   // yarn rename-contract NEW_CONTRACT_NAME
   // Please DO NOT change it manually!
-  contractName: 'YourNftToken',
-  tokenName: 'My NFT Token',
-  tokenSymbol: 'MNT',
-  hiddenMetadataUri: 'ipfs://__CID__/hidden.json',
+  contractName: 'OrbitNFTCollection',
+  tokenName: 'ORBIT',
+  tokenSymbol: 'ORB',
+  hiddenMetadataUri: 'ipfs://QmeshU7wTMn8W4RH1yLWGzHWTAj5sHxQNoSJhTBWZwQpPD/nftmetadata.json',
   maxSupply: 10000,
   whitelistSale: {
     price: 0.05,
@@ -22,7 +22,7 @@ const CollectionConfig: CollectionConfigInterface = {
     price: 0.09,
     maxMintAmountPerTx: 5,
   },
-  contractAddress: null,
+  contractAddress: '0x36a0203D34Ed7DA33d0B1730D43a7CebE9A3251C',
   openSeaSlug: 'my-nft-token',
   whitelistAddresses: whitelistAddresses,
 };

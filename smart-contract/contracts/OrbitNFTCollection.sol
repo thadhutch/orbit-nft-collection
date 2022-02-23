@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract YourNftToken is ERC721, Ownable, ReentrancyGuard {
+contract OrbitNFTCollection is ERC721, Ownable, ReentrancyGuard {
 
   using Strings for uint256;
   using Counters for Counters.Counter;
@@ -21,7 +21,7 @@ contract YourNftToken is ERC721, Ownable, ReentrancyGuard {
   string public uriPrefix = "";
   string public uriSuffix = ".json";
   string public hiddenMetadataUri;
-  
+
   uint256 public cost;
   uint256 public maxSupply;
   uint256 public maxMintAmountPerTx;
@@ -75,7 +75,7 @@ contract YourNftToken is ERC721, Ownable, ReentrancyGuard {
 
     _mintLoop(msg.sender, _mintAmount);
   }
-  
+
   function mintForAddress(uint256 _mintAmount, address _receiver) public mintCompliance(_mintAmount) onlyOwner {
     _mintLoop(_receiver, _mintAmount);
   }
@@ -164,14 +164,6 @@ contract YourNftToken is ERC721, Ownable, ReentrancyGuard {
   }
 
   function withdraw() public onlyOwner nonReentrant {
-    // This will pay HashLips Lab Team 5% of the initial sale.
-    // By leaving the following lines as they are you will contribute to the
-    // development of tools like this and many others.
-    // =============================================================================
-    (bool hs, ) = payable(0x146FB9c3b2C13BA88c6945A759EbFa95127486F4).call{value: address(this).balance * 5 / 100}("");
-    require(hs);
-    // =============================================================================
-
     // This will transfer the remaining contract balance to the owner.
     // Do not remove this otherwise you will not be able to withdraw the funds.
     // =============================================================================
