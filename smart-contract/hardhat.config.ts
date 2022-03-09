@@ -136,7 +136,12 @@ const config: HardhatUserConfig = {
   },
   networks: {
     rinkeby: {
-      url: process.env.ALCHEMY_API_KEY || "",
+      url: process.env.RINKEBY_ALCHEMY_API_KEY || "",
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+    ropsten: {
+      url: process.env.ROPSTEN_ALCHEMY_API_KEY || "",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
@@ -150,6 +155,14 @@ const config: HardhatUserConfig = {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
 };
+
+// Setup Ropsten network
+if (process.env.NETWORK_ROPSTEN_URL !== undefined) {
+  config.networks!.mainnet = {
+    url: process.env.NETWORK_ROPSTEN_URL,
+    accounts: [process.env.NETWORK_ROPSTEN_PRIVATE_KEY!],
+  };
+}
 
 // Setup Rinkeby network
 if (process.env.NETWORK_RINKEBY_URL !== undefined) {
