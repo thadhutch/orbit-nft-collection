@@ -107,6 +107,11 @@ contract OrbitNFTCollection is ERC721, Ownable, ReentrancyGuard {
         require(msg.value >= price, "ETH < price");
 
         _mintLoop(msg.sender, _mintAmount);
+
+        uint refund = msg.value - price;
+        if (refund > 0) {
+            payable(msg.sender).transfer(refund);
+        }
     }
 
   function mintForAddress(uint256 _mintAmount, address _receiver) public mintCompliance(_mintAmount) onlyOwner {
