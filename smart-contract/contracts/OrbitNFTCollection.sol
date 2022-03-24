@@ -97,7 +97,7 @@ contract OrbitNFTCollection is ERC721, Ownable, ReentrancyGuard {
     return startingPrice - discount;
   }
 
-  function buy(uint256 _mintAmount) external payable {
+  function buy(uint256 _mintAmount) mintCompliance(_mintAmount) external payable {
     require(initialized == true, "Auction hasn't started");
     require(block.timestamp < expiresAt, "auction expired");
 
