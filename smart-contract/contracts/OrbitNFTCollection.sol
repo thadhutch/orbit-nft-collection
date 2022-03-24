@@ -63,6 +63,11 @@ contract OrbitNFTCollection is ERC721, Ownable, ReentrancyGuard {
     _;
   }
 
+  modifier auctionStarted() {
+    require(initialized == true, "Auction hasn't started");
+    _;
+  }
+
   function totalSupply() public view returns (uint256) {
     return supply.current();
   }
@@ -89,16 +94,13 @@ contract OrbitNFTCollection is ERC721, Ownable, ReentrancyGuard {
     discountRate = _discountRate;
   }
 
-  function getPrice() public view returns (uint) {
-    require(initialized == true, "Auction hasn't started");
-
+  function getPrice() auctionStarted public view returns (uint) {
     uint timeElapsed = block.timestamp - startAt;
     uint discount = discountRate * timeElapsed;
     return startingPrice - discount;
   }
 
-  function buy(uint256 _mintAmount) mintCompliance(_mintAmount) external payable {
-    require(initialized == true, "Auction hasn't started");
+  function buy(uint256 _mintAmount) auctionStarted mintCompliance(_mintAmount) external payable {
     require(block.timestamp < expiresAt, "auction expired");
 
         uint price = getPrice();
