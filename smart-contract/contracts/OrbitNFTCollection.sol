@@ -30,6 +30,14 @@ contract OrbitNFTCollection is ERC721, Ownable, ReentrancyGuard {
   bool public whitelistMintEnabled = false;
   bool public revealed = false;
 
+  // Dutch Auction Params
+  bool public initialized = false;
+  uint public startingPrice;
+  uint public startAt;
+  uint public expiresAt;
+  uint public discountRate;
+  uint public duration;
+
   constructor(
     string memory _tokenName,
     string memory _tokenSymbol,
@@ -68,6 +76,17 @@ contract OrbitNFTCollection is ERC721, Ownable, ReentrancyGuard {
 
     whitelistClaimed[msg.sender] = true;
     _mintLoop(msg.sender, _mintAmount);
+  }
+
+  function initializeDutchAuction(uint _startingPrice, uint _discountRate, uint _duration ) external onlyOwner {
+    require(_startingPrice >= _discountRate * _duration, "starting price < min");
+    require(initialized == false, "Auction has already been initialized");
+
+    initialized = true;
+    startingPrice = _startingPrice;
+    startAt = block.timestamp;
+    expiresAt = block.timestamp + duration;
+    discountRate = _discountRate;
   }
 
   function mint(uint256 _mintAmount) public payable mintCompliance(_mintAmount) mintPriceCompliance(_mintAmount) {
