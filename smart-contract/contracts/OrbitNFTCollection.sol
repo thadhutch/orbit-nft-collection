@@ -32,11 +32,11 @@ contract OrbitNFTCollection is ERC721, Ownable, ReentrancyGuard {
 
   // Dutch Auction Params
   bool public initialized = false;
-  uint public startingPrice;
-  uint public startAt;
-  uint public expiresAt;
-  uint public discountRate;
-  uint public duration;
+  uint256 public startingPrice;
+  uint256 public startAt;
+  uint256 public expiresAt;
+  uint256 public discountRate;
+  uint256 public duration;
 
   constructor(
     string memory _tokenName,
@@ -78,7 +78,7 @@ contract OrbitNFTCollection is ERC721, Ownable, ReentrancyGuard {
     _mintLoop(msg.sender, _mintAmount);
   }
 
-  function initializeDutchAuction(uint _startingPrice, uint _discountRate, uint _duration ) external onlyOwner {
+  function initializeDutchAuction(uint256 _startingPrice, uint256 _discountRate, uint256 _duration ) external onlyOwner {
     require(_startingPrice >= _discountRate * _duration, "starting price < min");
     require(initialized == false, "Auction has already been initialized");
 
@@ -89,11 +89,23 @@ contract OrbitNFTCollection is ERC721, Ownable, ReentrancyGuard {
     discountRate = _discountRate;
   }
 
-  function mint(uint256 _mintAmount) public payable mintCompliance(_mintAmount) mintPriceCompliance(_mintAmount) {
-    require(!paused, "The contract is paused!");
+  function getPrice() public view returns (uint) {
+    require(initialized == true, "Auction hasn't started");
 
-    _mintLoop(msg.sender, _mintAmount);
+    uint timeElapsed = block.timestamp - startAt;
+    uint discount = discountRate * timeElapsed;
+    return startingPrice - discount;
   }
+
+  function buy(uint256 _mintAmount) external payable {
+    require(initialized == true, "Auction hasn't started");
+    require(block.timestamp < expiresAt, "auction expired");
+
+        uint price = getPrice();
+        require(msg.value >= price, "ETH < price");
+
+        _mintLoop(msg.sender, _mintAmount);
+    }
 
   function mintForAddress(uint256 _mintAmount, address _receiver) public mintCompliance(_mintAmount) onlyOwner {
     _mintLoop(_receiver, _mintAmount);
